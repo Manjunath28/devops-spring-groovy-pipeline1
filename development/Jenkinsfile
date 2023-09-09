@@ -23,12 +23,27 @@ pipeline {
 						bat "mvn -Dmaven.test.failure.ignore=true clean package"
 					}
 				
+				} 
+            }
+            
+             stage('Build') {
+            steps {
+                // Get some code from a GitHub repository
+                git url:'https://github.com/Manjunath28/devops-spring-groovy-pipeline1.git'
+				
+				script{
+					
+					if(isUnix()){
+						// Run Maven on a Unix agent.
+                sh "mvn -Dmaven.test.failure.ignore=true clean verify"
+					}
+					
+					else{
+						bat "mvn -Dmaven.test.failure.ignore=true clean verify"
+					}
+				
 				}
 				
-                
-
-                // To run Maven on a Windows agent, use
-                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
             }
 
             post {
