@@ -64,8 +64,8 @@ pipeline {
                 success {
                 
                 	jacoco(
-                		execPattern: '**/build/jacoco/*.exec',
-                		classPattern: '**/build/classes/groovy/main',
+                		execPattern: '**/target/jacoco/*.exec',
+                		classPattern: '**/target/classes',
                 		sourcePattern: '**/src/main'
                 	
                 	)
