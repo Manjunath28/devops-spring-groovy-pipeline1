@@ -10,43 +10,39 @@ pipeline {
         stage('Build') {
             steps {
                 // Get some code from a GitHub repository
-                git url:'https://github.com/Manjunath28/devops-spring-groovy-pipeline1.git'
-				
-				script{
-					
-					if(isUnix()){
-						// Run Maven on a Unix agent.
+                git url: 'https://github.com/Manjunath28/devops-spring-groovy-pipeline1.git'
+
+                // Run Maven on a Unix agent.
+                script{
+                if(isUnix()){
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
-					}
-					
-					else{
-						bat "mvn -Dmaven.test.failure.ignore=true clean package"
-					}
-				
-				} 
+				}	
+                else{
+                 bat "mvn -Dmaven.test.failure.ignore=true clean package"
+                 }
+                 }
+            }
             }
             
-             stage('Build') {
+           
+           
+         stage('Integration Test') {
             steps {
-                // Get some code from a GitHub repository
-                git url:'https://github.com/Manjunath28/devops-spring-groovy-pipeline1.git'
-				
-				script{
-					
-					if(isUnix()){
-						// Run Maven on a Unix agent.
+               
+                // Run Maven on a Unix agent.
+                script{
+                if(isUnix()){
                 sh "mvn -Dmaven.test.failure.ignore=true clean verify"
-					}
-					
-					else{
-						bat "mvn -Dmaven.test.failure.ignore=true clean verify"
-					}
-				
-				}
-				
+				}	
+                else{
+                 bat "mvn -Dmaven.test.failure.ignore=true clean verify"
+                 }
+                 }
             }
-
-            post {
+        
+    	}
+    }
+     post {
                 // If Maven was able to run the tests, even if some of the test
                 // failed, record the test results and archive the jar file.
                 success {
@@ -54,6 +50,6 @@ pipeline {
                     archiveArtifacts 'target/*.jar'
                 }
             }
-        }
-    }
+            
+        
 }
