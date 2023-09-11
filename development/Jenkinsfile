@@ -11,7 +11,6 @@ pipeline {
             steps {
                 // Get some code from a GitHub repository
                 git url: 'https://github.com/Manjunath28/devops-spring-groovy-pipeline1.git'
-
                 // Run Maven on a Unix agent.
                 script{
                 if(isUnix()){
@@ -38,37 +37,35 @@ pipeline {
                  bat "mvn -Dmaven.test.failure.ignore=true clean verify"
                  }
                  }
-                 
-                git url:'https://github.com/Manjunath28/devops-spring-groovy-pipeline1.git'
-
-                // Run Maven on a Unix agent.
-               script{ 
-               if(isUnix()){
-                	sh "mvn -Dmaven.test.failure.ignore=true clean package"
-                }
-                else{
-                	bat "mvn -Dmaven.test.failure.ignore=true clean package"
-                }
-                }
-                
-
-                // To run Maven on a Windows agent, use
-                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
             }
         
     	}
     	
-    	
+    	stage('Publish Artifactory') {
+steps {
+
+// Run Maven on a Unix agent.
+script{
+if(isUnix()){
+sh "mvn -Dmaven.test.failure.ignore=true deploy"
+               }    
+else{
+bat "mvn -Dmaven.test.failure.ignore=true deploy"
+}
+}
+}
+
+   }    	
     }
      post {
                 // If Maven was able to run the tests, even if some of the test
                 // failed, record the test results and archive the jar file.
                 success {
-                
-                	jacoco(
-                		
-                		classPattern: '**/target/classes',
-                		sourcePattern: '**/src/main/groovy'
+                	
+                	jacoco (
+                	
+                	classPattern: '**/target/classes',
+                	sourcePattern : '**/src/main/groovy'
                 	
                 	)
                 	
