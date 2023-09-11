@@ -41,7 +41,26 @@ pipeline {
         
     	}
     	
-    	stage('Publish Artifactory') {
+ 
+   
+   
+    	stage('SonarQubeStaticAnalysis') {
+steps {
+
+// Run Maven on a Unix agent.
+script{
+if(isUnix()){
+sh "mvn -Dmaven.test.failure.ignore=true sonar:sonar"
+               }    
+else{
+bat "mvn -Dmaven.test.failure.ignore=true sonar:sonar"
+}
+}
+}
+
+   }   
+   
+       	stage('Publish Artifactory') {
 steps {
 
 // Run Maven on a Unix agent.
@@ -55,7 +74,10 @@ bat "mvn -Dmaven.test.failure.ignore=true deploy"
 }
 }
 
-   }    	
+   }   
+   
+   
+    	
     }
      post {
                 // If Maven was able to run the tests, even if some of the test
