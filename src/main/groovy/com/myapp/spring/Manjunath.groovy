@@ -2,7 +2,7 @@ package com.myapp.spring
 
 class Manjunath {
 	
-	print"Manjunath Yes"
+	print("Manjunath Y is ruuning")
 }
 
 
